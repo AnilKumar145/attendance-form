@@ -15,16 +15,24 @@ export default function QRDisplay({ qrCode, expiryTime }: QRDisplayProps) {
       const now = new Date().getTime();
       const difference = expiry - now;
       
-      // Add a 2-second buffer to prevent premature expiration
-      return Math.max(0, Math.floor(difference / 1000) + 2);
+      // Debug logs
+      console.log('Expiry time:', new Date(expiryTime).toISOString());
+      console.log('Current time:', new Date().toISOString());
+      console.log('Time difference (seconds):', Math.floor(difference / 1000));
+      
+      // Add a 5-second buffer to prevent premature expiration
+      return Math.max(0, Math.floor(difference / 1000) + 5);
     } catch (e) {
       console.error('Error calculating time:', e);
+      console.error('Received expiryTime:', expiryTime);
       return 0;
     }
   }, [expiryTime]);
 
   useEffect(() => {
-    // Initial calculation
+    // Log when new expiry time is received
+    console.log('New QR code received with expiry:', expiryTime);
+    
     setTimeLeft(calculateTimeLeft());
 
     const timer = setInterval(() => {
@@ -37,7 +45,7 @@ export default function QRDisplay({ qrCode, expiryTime }: QRDisplayProps) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [calculateTimeLeft]);
+  }, [calculateTimeLeft, expiryTime]);
 
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
@@ -73,6 +81,7 @@ export default function QRDisplay({ qrCode, expiryTime }: QRDisplayProps) {
     </Box>
   );
 }
+
 
 
 

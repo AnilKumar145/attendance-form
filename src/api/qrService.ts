@@ -33,7 +33,7 @@ export const fetchLatestQR = async (): Promise<QRResponse> => {
             console.log(`Attempting to fetch QR code (attempt ${attempt + 1})`);
             console.log(`Requesting from: ${API_BASE_URL}${API_ENDPOINTS.QR.GENERATE}`);
             
-            const response = await axiosInstance.get(  // Changed from post to get
+            const response = await axiosInstance.get(
                 API_ENDPOINTS.QR.GENERATE,
                 {
                     responseType: 'arraybuffer',
@@ -43,6 +43,12 @@ export const fetchLatestQR = async (): Promise<QRResponse> => {
             const sessionId = response.headers['session-id'];
             const expiryTime = response.headers['expiry-time'];
             
+            console.log('Received headers:', {
+                sessionId,
+                expiryTime,
+                'content-type': response.headers['content-type']
+            });
+
             if (!sessionId || !expiryTime) {
                 throw new Error('Missing session ID or expiry time in response headers');
             }
@@ -108,6 +114,7 @@ export const checkQRStatus = async (sessionId: string): Promise<boolean> => {
     return false;
   }
 };
+
 
 
 

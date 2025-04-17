@@ -14,11 +14,16 @@ const QRScanner = () => {
             setLoading(true);
             setError(null);
             const response = await fetchLatestQR();
+            
+            // Debug logs
+            console.log('Fetched new QR code at:', new Date().toISOString());
+            console.log('Response expiry time:', response.expiry_time);
+            
             setQrCode(response.qr_code);
             setExpiryTime(response.expiry_time);
         } catch (err) {
-            setError('Failed to fetch QR code');
             console.error('Error fetching QR:', err);
+            setError('Failed to fetch QR code');
         } finally {
             setLoading(false);
         }
@@ -26,9 +31,8 @@ const QRScanner = () => {
 
     useEffect(() => {
         fetchQR();
-        // Fetch new QR code every 2.5 minutes (150000ms) instead of 2 minutes
-        // This ensures we have a new QR code before the current one expires
-        const intervalId = setInterval(fetchQR, 150000);
+        // Fetch new QR code every 2 minutes (120000ms)
+        const intervalId = setInterval(fetchQR, 120000);
 
         return () => clearInterval(intervalId);
     }, [fetchQR]);
@@ -67,6 +71,7 @@ const QRScanner = () => {
 };
 
 export default QRScanner;
+
 
 
 
