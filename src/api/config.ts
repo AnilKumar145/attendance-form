@@ -9,8 +9,8 @@ const getApiBaseUrl = () => {
     return 'http://localhost:8000';
   }
   
-  // Production fallback - replace with your deployed backend URL
-  return 'https://your-backend-url.onrender.com';
+  // Production fallback
+  return 'https://your-backend-url.onrender.com'; // Replace with your actual backend URL
 };
 
 export const API_BASE_URL = getApiBaseUrl();
@@ -24,6 +24,7 @@ export const API_ENDPOINTS = {
         SUBMIT: '/api/attendance/submit'
     }
 };
+
 
 
 

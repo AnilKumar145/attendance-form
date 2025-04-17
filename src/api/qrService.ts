@@ -14,6 +14,11 @@ interface QRResponse {
 const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
     timeout: 15000,
+    withCredentials: true, // Important for CORS
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
 });
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
@@ -37,17 +42,17 @@ export const fetchLatestQR = async (): Promise<QRResponse> => {
                 API_ENDPOINTS.QR.GENERATE,
                 {
                     responseType: 'arraybuffer',
+                    headers: {
+                        'Accept': 'image/png',
+                    }
                 }
             );
 
             const sessionId = response.headers['session-id'];
             const expiryTime = response.headers['expiry-time'];
             
-            console.log('Received headers:', {
-                sessionId,
-                expiryTime,
-                'content-type': response.headers['content-type']
-            });
+            console.log('Response headers:', response.headers);
+            console.log('Response status:', response.status);
 
             if (!sessionId || !expiryTime) {
                 throw new Error('Missing session ID or expiry time in response headers');
@@ -114,6 +119,7 @@ export const checkQRStatus = async (sessionId: string): Promise<boolean> => {
     return false;
   }
 };
+
 
 
 
