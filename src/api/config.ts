@@ -21,10 +21,10 @@ export const API_ENDPOINTS = {
         CHECK_STATUS: '/api/qr/session'
     },
     ATTENDANCE: {
-        SUBMIT: '/api/attendance/submit',
-        VALIDATE: '/api/attendance/validate-location'
+        SUBMIT: '/api/attendance/submit'
     }
 };
+
 
 
 
