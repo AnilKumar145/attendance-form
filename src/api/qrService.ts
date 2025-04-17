@@ -81,87 +81,43 @@ export const fetchLatestQR = async (): Promise<QRResponse> => {
 };
 
 export const startQRPolling = (
-  onUpdate: (qr: QRResponse) => void,
-  onError: (error: Error) => void
+    onUpdate: (qr: QRResponse) => void,
+    onError: (error: Error) => void
 ) => {
-  let isPolling = true;
-  
-  const poll = async () => {
-    while (isPolling) {
-      try {
-        const qr = await fetchLatestQR();
-        onUpdate(qr);
-      } catch (error) {
-        onError(error as Error);
-      }
-      await new Promise(resolve => setTimeout(resolve, QR_UPDATE_INTERVAL));
-    }
-  };
+    let isPolling = true;
+    
+    const poll = async () => {
+        while (isPolling) {
+            try {
+                const qr = await fetchLatestQR();
+                onUpdate(qr);
+            } catch (error) {
+                onError(error as Error);
+            }
+            await new Promise(resolve => setTimeout(resolve, QR_UPDATE_INTERVAL));
+        }
+    };
 
-  poll();
-  return () => {
-    isPolling = false;
-  };
+    poll();
+    return () => {
+        isPolling = false;
+    };
 };
 
 export const checkQRStatus = async (sessionId: string): Promise<boolean> => {
-  try {
-    const response = await axios.get(
-      `${API_ENDPOINTS.QR.CHECK_STATUS}/${sessionId}/status`,
-      {
-        withCredentials: true,
-        timeout: 5000
-      }
-    );
-    return response.data.valid;
-  } catch (error) {
-    console.error('QR Status Check Error:', error);
-    return false;
-  }
+    try {
+        const response = await axiosInstance.get(
+            `${API_ENDPOINTS.QR.CHECK_STATUS}/${sessionId}/status`,
+            {
+                timeout: 5000
+            }
+        );
+        return response.data.valid;
+    } catch (error) {
+        console.error('QR Status Check Error:', error);
+        return false;
+    }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Add any additional QR-related service functions here
 
