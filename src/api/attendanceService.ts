@@ -15,11 +15,12 @@ export interface AttendancePayload {
 
 export const submitAttendance = async (data: AttendancePayload) => {
   try {
+    console.log('Submitting attendance to:', `${API_BASE_URL}${API_ENDPOINTS.ATTENDANCE.SUBMIT}`);
+    
     const response = await axios.post(
       `${API_BASE_URL}${API_ENDPOINTS.ATTENDANCE.SUBMIT}`,
       data,
       {
-        withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
         }
@@ -28,12 +29,21 @@ export const submitAttendance = async (data: AttendancePayload) => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.detail || error.message;
+      console.error('Attendance submission error:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
+      
+      const errorMessage = error.response?.data?.detail || 
+                          error.message || 
+                          'Failed to submit attendance';
       throw new Error(errorMessage);
     }
     throw new Error('Failed to submit attendance');
   }
 };
+
 
 
 

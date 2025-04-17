@@ -26,7 +26,9 @@ const QRScanner = () => {
 
     useEffect(() => {
         fetchQR();
-        const intervalId = setInterval(fetchQR, 120000); // 2 minutes
+        // Fetch new QR code every 2.5 minutes (150000ms) instead of 2 minutes
+        // This ensures we have a new QR code before the current one expires
+        const intervalId = setInterval(fetchQR, 150000);
 
         return () => clearInterval(intervalId);
     }, [fetchQR]);
@@ -65,5 +67,6 @@ const QRScanner = () => {
 };
 
 export default QRScanner;
+
 
 
